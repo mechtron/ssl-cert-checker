@@ -20,9 +20,9 @@ resource "aws_lambda_function" "lambda_function" {
 
   environment {
     variables = {
-      SNS_TOPIC_ARN = aws_sns_topic.email_notifications.arn
       DYNAMODB_TABLE_NAME_CHECKS = aws_dynamodb_table.dynamodb_table_checks.id
       DYNAMODB_TABLE_NAME_FAILURES = aws_dynamodb_table.dynamodb_table_failures.id
+      SES_FROM_EMAIL = var.ses_from_email
     }
   }
 

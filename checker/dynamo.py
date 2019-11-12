@@ -35,10 +35,13 @@ def create_check(parsed_args):
             "LastFailure": {
                 "N": "-1",
             },
+            "LastFailureNotification": {
+                "N": "-1",
+            },
             "NotificationTarget": {
                 "S": str(parsed_args.notification_target),
             },
-            "NotificationTargetIsSnsSubscribed": {
+            "SubscriptionEmailSent": {
                 "BOOL": False,
             },
             "NotificationMinutesBeforeResending": {
@@ -76,8 +79,8 @@ def get_checks():
             port=int(check["Port"]["N"]),
             check_interval_minutes=int(check["CheckIntervalMinutes"]["N"]),
             notification_target=check["NotificationTarget"]["S"],
-            notification_target_is_sns_subscribed=bool(
-                check["NotificationTargetIsSnsSubscribed"]["BOOL"]
+            subscription_email_sent=bool(
+                check["SubscriptionEmailSent"]["BOOL"]
             ),
             notification_minutes_before_resending=int(
                 check["NotificationMinutesBeforeResending"]["N"]
@@ -91,9 +94,12 @@ def get_checks():
             last_failure=datetime.fromtimestamp(int(
                 check["LastFailure"]["N"]
             )),
-            failed_check_retention_days=datetime.fromtimestamp(int(
-                check["FailedChecksRetentionDays"]["N"]
+            last_failure_notification=datetime.fromtimestamp(int(
+                check["LastFailureNotification"]["N"]
             )),
+            failed_check_retention_days=int(
+                check["FailedChecksRetentionDays"]["N"]
+            ),
             created=datetime.fromtimestamp(int(
                 check["Created"]["N"]
             ))
@@ -128,11 +134,11 @@ def update_check_date(check_id, field_name, epoch_time):
     )
 
 
-def update_sns_subscription_status(check_id, status):
+def update_ses_subscription_email_sent_status(check_id, status):
     response = DYNAMODB_CLIENT.update_item(
         TableName=DYNAMODB_TABLE_NAME_CHECKS,
         Key={"Id": {"S": check_id}},
-        UpdateExpression="SET NotificationTargetIsSnsSubscribed = :value",
+        UpdateExpression="SET SubscriptionEmailSent = :value",
         ExpressionAttributeValues={":value": {"BOOL": status}},
     )
     assert response["ResponseMetadata"]["HTTPStatusCode"] is 200
@@ -193,7 +199,7 @@ def get_failed_checks():
             failure_timestamp=datetime.fromtimestamp(int(
                 failed_check["FailureTimestamp"]["N"]
             )),
-            failure_mode=failed_check["IdFailureMode"]["S"],
+            failure_mode=failed_check["FailureMode"]["S"],
             cert_expiry=datetime.fromtimestamp(int(
                 failed_check["CertExpiry"]["N"]
             )),

@@ -14,9 +14,10 @@ from checker.dynamo import (
 def print_checks(checks):
     table = PrettyTable([
         "Id", "Hostname", "Port", "CheckIntervalMinutes", 
-        "NotificationTarget", "NotificationTargetIsSnsSubscribed",
+        "NotificationTarget", "SubscriptionEmailSent",
         "NotificationMinutesBeforeResending", "CertExpiryNotifyBeforeDays",
-        "LastChecked", "LastFailure", "FailedChecksRetentionDays", "Created"
+        "LastChecked", "LastFailure", "LastFailureNotification",
+        "FailedChecksRetentionDays", "Created"
     ])
     for check in checks:
         table.add_row([
@@ -25,11 +26,12 @@ def print_checks(checks):
             check["port"],
             check["check_interval_minutes"],
             check["notification_target"],
-            check["notification_target_is_sns_subscribed"],
+            check["subscription_email_sent"],
             check["notification_minutes_before_resending"],
             check["cert_expiry_notify_before_days"],
             check["last_checked"],
             check["last_failure"],
+            check["last_failure_notification"],
             check["failed_check_retention_days"],
             check["created"],
         ])

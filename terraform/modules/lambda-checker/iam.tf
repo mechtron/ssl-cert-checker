@@ -33,21 +33,13 @@ resource "aws_iam_role_policy" "send_sns_sms" {
     "Version": "2012-10-17",
     "Statement": [
         {
-            "Sid": "SetupSnsTopic",
+            "Sid": "SendSesEmail",
             "Effect": "Allow",
             "Action": [
-                "SNS:GetSubscriptionAttributes",
-                "SNS:ListSubscriptionsByTopic",
-                "SNS:Publish",
-                "SNS:Subscribe"
-            ],
-            "Resource": "${aws_sns_topic.email_notifications.arn}"
-        },
-        {
-            "Sid": "SendSnsEmail",
-            "Effect": "Allow",
-            "Action": [
-                "SNS:Publish"
+              "ses:ListVerifiedEmailAddresses",
+              "ses:VerifyEmailIdentity",
+              "ses:SendEmail",
+              "ses:SendRawEmail"
             ],
             "Resource": "*"
         },

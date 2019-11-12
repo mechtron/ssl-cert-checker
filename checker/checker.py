@@ -7,7 +7,7 @@ from dynamo import (
     get_checks,
     update_check_date,
 )
-from sns import send_email_notification
+from ses import send_email_notification
 from test_ssl import test_ssl
 
 
@@ -27,7 +27,7 @@ def time_to_check(check):
 
 def time_to_notify(check):
     delta_seconds = (
-        datetime.utcnow() - check["last_failure"]
+        datetime.now() - check["last_failure_notification"]
     ).total_seconds()
     last_failure_minutes = delta_seconds / 60
     time_no_notify = (
@@ -43,10 +43,9 @@ def time_to_notify(check):
 
 def generate_email_message(check, failed_result):
     subject = (
-        "ssl-cert-checker | {host}:{port} has failed SSL checks"
-    ).format(
-        host=check["hostname"],
-        port=check["port"],
+        "ssl-cert-checker | {} has failed SSL checks".format(
+            check["hostname"],
+        )
     )
     message = (
         "{host}:{port} has failed SSL checks at "
@@ -73,6 +72,9 @@ def main():
                 if time_to_notify(check):
                     subject, message = generate_email_message(check, result)
                     send_email_notification(check, subject, message)
+                    update_check_date(
+                        check["id"], "LastFailureNotification", now
+                    )
 
 
 def handler(_event, _context):
