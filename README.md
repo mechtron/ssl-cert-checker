@@ -18,7 +18,7 @@ Provisions a Lambda function that checks a configurable list of hostnames for SS
 
 #### Example notification
 
-<img src="img/example_notification.jpg" width="300">
+<img src="img/example_email_notification.png" width="500">
 
 ## CLI tool usage
 
