@@ -114,28 +114,28 @@ Example output:
 
 When an SSL connectivity test fails, you will get an email alert with a failure modes recorded:
 
-| Failure mode | `curl` exit code | Description |
-| :----------: |:---------------: |:------------|
-| `HOSTNAME_INVALID` | `6` | Couldn't resolve host. The given remote host's address was not resolved. The address of the given server could not be resolved. |
-| `FAILED_TO_CONNECT` | `7` | Failed to connect to host. curl managed to get an IP address to the machine and it tried to setup a TCP connection to the host but failed. |
-| `HTTP2_ERROR` | `16` | HTTP/2 error. A problem was detected in the HTTP2 framing layer. This is somewhat generic and can be one out of several problems, see the error message for details. |
-| `400_LEVEL_STATUS_CODE` | `22` | HTTP page not retrieved. The requested url was not found or returned another error with the HTTP error code being 400 or above. This return code only appears if `-f`, `--fail` is used. |
-| `CURL_OUT_OF_MEMORY` | `27` | Out of memory. A memory allocation request failed. curl needed to allocate more memory than what the system was willing to give it and had to exit. |
-| `CONNECTION_TIMED_OUT` | `28` | Operation timeout. The specified time-out period was reached according to the conditions. curl offers several timeouts, and this exit code tells one of those timeout limits were reached. |
-| `HTTP_RANGE_ERROR` | `33` | HTTP range error. The range request did not work. Resumed HTTP requests are not necessary acknowledged or supported. |
-| `SSL_HANDSHAKE_FAILED` | `35` | A TLS/SSL connect error. The SSL handshake failed |
-| `TOO_MANY_REDIRECTS` | `47` | Too many redirects. When following HTTP redirects, libcurl hit the maximum number set by the application. The maximum number of redirects is unlimited by libcurl but is set to 50 by default. |
-| `SSL_CERTIFICATE_SIGNATURE_INVALID` | `51` | The server's SSL/TLS certificate or SSH fingerprint failed verification. curl can then not be sure of the server being who it claims to be. |
-| `SSL_EMPTY_RESPONSE` | `52` | The server did not reply anything, which in this context is considered an error |
-| `CURL_NETWORK_FAILED_SEND` | `55` | Failed sending network data |
-| `CURL_NETWORK_FAILED_RECEIVE` | `56` | Failure in receiving network data |
-| `CURL_SSL_LOCAL_CERTIFICATE_ERROR` | `58` | Problem with the local certificate. The client certificate had a problem so it could not be used. |
-| `SSL_CERTIFICATE_EXPIRED` | `60` | Peer certificate cannot be authenticated with known CA certificates |
-| `CURL_SSL_CA_CERTIFICATE_READ_ERROR` | `77` | Problem with reading the SSL CA cert |
-| `CURL_SSL_CONNECTION_CLOSURE_FAILED` | `80` | Failed to shut down the SSL connection |
-| `SSL_CERTIFICATE_ISSUER_CHECK_FAILED` | `83` | TLS certificate issuer check failed |
-| `SSL_PUBLIC_KEY_DOES_NOT_MATCH_PINNED_KEY` | `90` | SSL public key does not matched pinned public key |
-| `SSL_CERTIFICATE_STATUS_INVALID` | `91` | Invalid SSL certificate status |
+| `curl` exit code | Failure mode | Description |
+|:---------------: | :----------: |:------------|
+| `6` | `HOSTNAME_INVALID` | Couldn't resolve host. The given remote host's address was not resolved. The address of the given server could not be resolved. |
+| `7` | `FAILED_TO_CONNECT` | Failed to connect to host. curl managed to get an IP address to the machine and it tried to setup a TCP connection to the host but failed. |
+| `16` | `HTTP2_ERROR` | HTTP/2 error. A problem was detected in the HTTP2 framing layer. This is somewhat generic and can be one out of several problems, see the error message for details. |
+ | `22` | `400_LEVEL_STATUS_CODE` | HTTP page not retrieved. The requested url was not found or returned another error with the HTTP error code being 400 or above. This return code only appears if `-f`, `--fail` is used. |
+| `27` | `CURL_OUT_OF_MEMORY` | Out of memory. A memory allocation request failed. curl needed to allocate more memory than what the system was willing to give it and had to exit. |
+| `28` | `CONNECTION_TIMED_OUT`| Operation timeout. The specified time-out period was reached according to the conditions. curl offers several timeouts, and this exit code tells one of those timeout limits were reached. |
+| `33` | `HTTP_RANGE_ERROR` | HTTP range error. The range request did not work. Resumed HTTP requests are not necessary acknowledged or supported. |
+| `35`  | `SSL_HANDSHAKE_FAILED` | A TLS/SSL connect error. The SSL handshake failed. |
+| `47` | `TOO_MANY_REDIRECTS` | Too many redirects. When following HTTP redirects, libcurl hit the maximum number set by the application. The maximum number of redirects is unlimited by libcurl but is set to 50 by default. |
+| `51` | `SSL_CERTIFICATE_SIGNATURE_INVALID` | The server's SSL/TLS certificate or SSH fingerprint failed verification. curl can then not be sure of the server being who it claims to be. |
+| `52` | `SSL_EMPTY_RESPONSE` | The server did not reply anything, which in this context is considered an error |
+| `55` | `CURL_NETWORK_FAILED_SEND` | Failed sending network data |
+| `56` | `CURL_NETWORK_FAILED_RECEIVE` | Failure in receiving network data |
+| `58` | `CURL_SSL_LOCAL_CERTIFICATE_ERROR` | Problem with the local certificate. The client certificate had a problem so it could not be used. |
+| `60` | `SSL_CERTIFICATE_EXPIRED` | Peer certificate cannot be authenticated with known CA certificates |
+| `77` | `CURL_SSL_CA_CERTIFICATE_READ_ERROR` | Problem with reading the SSL CA cert |
+| `80` | `CURL_SSL_CONNECTION_CLOSURE_FAILED` | Failed to shut down the SSL connection |
+| `83` | `SSL_CERTIFICATE_ISSUER_CHECK_FAILED` | TLS certificate issuer check failed |
+| `90` | `SSL_PUBLIC_KEY_DOES_NOT_MATCH_PINNED_KEY` | SSL public key does not matched pinned public key |
+| `91` | `SSL_CERTIFICATE_STATUS_INVALID` | Invalid SSL certificate status |
 
 Note: if `ssl-cert-checker` sees an unexpected `curl` exit code, a failure mode of `CURL_UNKNOWN_EXIT_CODE_<curl_exit_code>` will be used.
 
