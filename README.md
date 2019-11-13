@@ -61,7 +61,14 @@ You can list all hostnames to check for SSL issues using the `list` action:
 Example output:
 
 ```
-TODO
+Retrieving list of ongoing SSL checks from DynamoDB..
+2 SSL check(s) successfully loaded
++----------+-------------+------+----------------------+--------------------+-----------------------+------------------------------------+----------------------------+---------------------+---------------------+-------------------------+---------------------------+---------------------+
+|    Id    |   Hostname  | Port | CheckIntervalMinutes | NotificationTarget | SubscriptionEmailSent | NotificationMinutesBeforeResending | CertExpiryNotifyBeforeDays |     LastChecked     |     LastFailure     | LastFailureNotification | FailedChecksRetentionDays |       Created       |
++----------+-------------+------+----------------------+--------------------+-----------------------+------------------------------------+----------------------------+---------------------+---------------------+-------------------------+---------------------------+---------------------+
+| 45068762 | example.com | 443  |          15          | admin@example.com  |         True          |                 30                 |             30             | 2019-11-13 00:46:23 | 2019-11-13 00:46:23 |   2019-11-13 00:18:12   |            120            | 2019-11-12 01:29:03 |
+| cfde538c |  example.ca | 443  |          15          | admin@example.com  |         True          |                 30                 |             30             | 2019-11-13 00:46:24 | 2019-11-13 00:46:24 |   2019-11-13 00:18:15   |            120            | 2019-11-12 01:29:06 |
++----------+-------------+------+----------------------+--------------------+-----------------------+------------------------------------+----------------------------+---------------------+---------------------+-------------------------+---------------------------+---------------------+
 ```
 
 ### List all check failures
@@ -73,32 +80,64 @@ You can list all failures for all hostnames using the `list-failures` action:
 Example output:
 
 ```
-TODO
+Retrieving list of failed SSL checks from DynamoDB..
+5 failed checks loaded
++----------+----------+---------------------+-------------------------+---------------------+
+|    Id    | CheckId  |   FailureTimestamp  |       FailureMode       |      CertExpiry     |
++----------+----------+---------------------+-------------------------+---------------------+
+| 4d35475d | 45068762 | 2019-11-13 00:46:23 | SSL_CERTIFICATE_EXPIRED | 1969-12-31 15:59:59 |
+| 9b7b1b7a | cfde538c | 2019-11-13 00:46:24 |     INVALID_HOSTNAME    | 1969-12-31 15:59:59 |
++----------+----------+---------------------+-------------------------+---------------------+
 ```
 
 #### List check failures for a certain domain
+
+_COMING SOON_
 
 You can list all failures for a certain hostname by adding the optional `--domain` switch:
 
 	ssl-cert-checker --action list-failures --domain example.com
 
-Example output:
-
-```
-TODO
-```
-
 ### Delete a check
 
 You can also delete users using the `delete` action:
 
-	ssl-cert-checker --action delete --id 769d1308
+	ssl-cert-checker --action delete --id 4d35475d
 
 Where `--id` is the check id which can be obtained using the `list` action.
 
 Example output:
 
-	SSL check with ID 769d1308 was successfully deleted
+	SSL check with ID 4d35475d was successfully deleted
+
+## Detected failure modes
+
+When an SSL connectivity test fails, you will get an email alert with a failure modes recorded:
+
+| Failure mode | `curl` exit code | Description |
+| :----------: |:---------------: |:------------|
+| `INVALID_HOSTNAME` | `6` | Couldn't resolve host. The given remote host's address was not resolved. The address of the given server could not be resolved. |
+| `FAILED_TO_CONNECT` | `7` | Failed to connect to host. curl managed to get an IP address to the machine and it tried to setup a TCP connection to the host but failed. |
+| `HTTP2_ERROR` | `16` | HTTP/2 error. A problem was detected in the HTTP2 framing layer. This is somewhat generic and can be one out of several problems, see the error message for details. |
+| `400_LEVEL_STATUS_CODE` | `22` | HTTP page not retrieved. The requested url was not found or returned another error with the HTTP error code being 400 or above. This return code only appears if `-f`, `--fail` is used. |
+| `CURL_OUT_OF_MEMORY` | `27` | Out of memory. A memory allocation request failed. curl needed to allocate more memory than what the system was willing to give it and had to exit. |
+| `CONNECTION_TIMED_OUT` | `28` | Operation timeout. The specified time-out period was reached according to the conditions. curl offers several timeouts, and this exit code tells one of those timeout limits were reached. |
+| `HTTP_RANGE_ERROR` | `33` | HTTP range error. The range request did not work. Resumed HTTP requests are not necessary acknowledged or supported. |
+| `SSL_HANDSHAKE_FAILED` | `35` | A TLS/SSL connect error. The SSL handshake failed |
+| `TOO_MANY_REDIRECTS` | `47` | Too many redirects. When following HTTP redirects, libcurl hit the maximum number set by the application. The maximum number of redirects is unlimited by libcurl but is set to 50 by default. |
+| `SSL_CERTIFICATE_SIGNATURE_INVALID` | `51` | The server's SSL/TLS certificate or SSH fingerprint failed verification. curl can then not be sure of the server being who it claims to be. |
+| `SSL_EMPTY_RESPONSE` | `52` | The server did not reply anything, which in this context is considered an error |
+| `CURL_NETWORK_FAILED_SEND` | `55` | Failed sending network data |
+| `CURL_NETWORK_FAILED_RECEIVE` | `56` | Failure in receiving network data |
+| `CURL_SSL_LOCAL_CERTIFICATE_ERROR` | `58` | Problem with the local certificate. The client certificate had a problem so it could not be used. |
+| `SSL_CERTIFICATE_EXPIRED` | `60` | Peer certificate cannot be authenticated with known CA certificates |
+| `CURL_SSL_CA_CERTIFICATE_READ_ERROR` | `77` | Problem with reading the SSL CA cert |
+| `CURL_SSL_CONNECTION_CLOSURE_FAILED` | `80` | Failed to shut down the SSL connection |
+| `SSL_CERTIFICATE_ISSUER_CHECK_FAILED` | `83` | TLS certificate issuer check failed |
+| `SSL_PUBLIC_KEY_DOES_NOT_MATCH_PINNED_KEY` | `90` | SSL public key does not matched pinned public key |
+| `SSL_CERTIFICATE_STATUS_INVALID` | `91` | Invalid SSL certificate status |
+
+Note: if `ssl-cert-checker` sees an unexpected `curl` exit code, a failure mode of `CURL_UNKNOWN_EXIT_CODE_<curl_exit_code>` will be returned.
 
 ## AWS infrastructure
 
@@ -152,6 +191,7 @@ Creating new environments is as easy as creating a new Terragrunt environment fo
 
 1. Add TTL to DynamoDB items in failed checks history table
 1. Send `SSL_CERTIFICATE_EXPIRED` alerts before cert actually expires
+1. Add `--domain` switch to return failures for a certain hostname only. Example: `ssl-cert-checker --action list-failures --domain example.com`
 1. Add support for "Fixed: back online" notifications
 1. Add support for Slack notifications
 1. Add GitHub Actions deployment pipeline
