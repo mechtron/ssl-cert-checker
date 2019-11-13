@@ -4,7 +4,7 @@ import time
 
 def curl_exit_code_to_error_code(exit_code):
     error_codes = {
-        6: "INVALID_HOSTNAME",
+        6: "HOSTNAME_INVALID",
         7: "FAILED_TO_CONNECT",
         16: "HTTP2_ERROR",
         22: "400_LEVEL_STATUS_CODE",

@@ -116,7 +116,7 @@ When an SSL connectivity test fails, you will get an email alert with a failure 
 
 | Failure mode | `curl` exit code | Description |
 | :----------: |:---------------: |:------------|
-| `INVALID_HOSTNAME` | `6` | Couldn't resolve host. The given remote host's address was not resolved. The address of the given server could not be resolved. |
+| `HOSTNAME_INVALID` | `6` | Couldn't resolve host. The given remote host's address was not resolved. The address of the given server could not be resolved. |
 | `FAILED_TO_CONNECT` | `7` | Failed to connect to host. curl managed to get an IP address to the machine and it tried to setup a TCP connection to the host but failed. |
 | `HTTP2_ERROR` | `16` | HTTP/2 error. A problem was detected in the HTTP2 framing layer. This is somewhat generic and can be one out of several problems, see the error message for details. |
 | `400_LEVEL_STATUS_CODE` | `22` | HTTP page not retrieved. The requested url was not found or returned another error with the HTTP error code being 400 or above. This return code only appears if `-f`, `--fail` is used. |
@@ -137,7 +137,7 @@ When an SSL connectivity test fails, you will get an email alert with a failure 
 | `SSL_PUBLIC_KEY_DOES_NOT_MATCH_PINNED_KEY` | `90` | SSL public key does not matched pinned public key |
 | `SSL_CERTIFICATE_STATUS_INVALID` | `91` | Invalid SSL certificate status |
 
-Note: if `ssl-cert-checker` sees an unexpected `curl` exit code, a failure mode of `CURL_UNKNOWN_EXIT_CODE_<curl_exit_code>` will be returned.
+Note: if `ssl-cert-checker` sees an unexpected `curl` exit code, a failure mode of `CURL_UNKNOWN_EXIT_CODE_<curl_exit_code>` will be used.
 
 ## AWS infrastructure
 
