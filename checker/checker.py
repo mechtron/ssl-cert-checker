@@ -49,11 +49,11 @@ def generate_email_message(check, failed_result):
     )
     message = (
         "{host}:{port} has failed SSL checks at "
-        "{failure_timestamp} due to {failure_mode}"
+        "{timestamp} due to {failure_mode}"
     ).format(
         host=check["hostname"],
         port=check["port"],
-        failure_timestamp=failed_result["failure_timestamp"],
+        timestamp=failed_result["timestamp"],
         failure_mode=failed_result["failure_mode"],
     )
     return subject, message

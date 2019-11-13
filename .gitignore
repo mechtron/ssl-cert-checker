@@ -16,7 +16,6 @@ checker/jmespath*
 checker/prettytable*
 checker/python_dateutil*
 checker/pytz*
-checker/requests*
 checker/s3transfer*
 checker/six*
 checker/urllib3*

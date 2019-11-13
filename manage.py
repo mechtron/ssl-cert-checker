@@ -46,7 +46,7 @@ def print_failed_checks(failed_checks):
         table.add_row([
             failed_check["id"],
             failed_check["check_id"],
-            failed_check["failure_timestamp"],
+            failed_check["timestamp"],
             failed_check["failure_mode"],
             failed_check["cert_expiry"],
         ])

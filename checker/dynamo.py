@@ -164,7 +164,7 @@ def create_failed_check(check, failed_result):
                 "S": check["id"],
             },
             "FailureTimestamp": {
-                "N": str(failed_result["failure_timestamp"]),
+                "N": str(failed_result["timestamp"]),
             },
             "FailureMode": {
                 "S": failed_result["failure_mode"],
@@ -196,7 +196,7 @@ def get_failed_checks():
         failed_checks.append(dict(
             id=failed_check["Id"]["S"],
             check_id=failed_check["CheckId"]["S"],
-            failure_timestamp=datetime.fromtimestamp(int(
+            timestamp=datetime.fromtimestamp(int(
                 failed_check["FailureTimestamp"]["N"]
             )),
             failure_mode=failed_check["FailureMode"]["S"],

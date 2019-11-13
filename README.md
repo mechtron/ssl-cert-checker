@@ -151,6 +151,7 @@ Creating new environments is as easy as creating a new Terragrunt environment fo
 ## To do
 
 1. Add TTL to DynamoDB items in failed checks history table
+1. Send `SSL_CERTIFICATE_EXPIRED` alerts before cert actually expires
 1. Add support for "Fixed: back online" notifications
 1. Add support for Slack notifications
 1. Add GitHub Actions deployment pipeline
