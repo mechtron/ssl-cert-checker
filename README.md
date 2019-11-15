@@ -148,6 +148,10 @@ Note: if `ssl-cert-checker` sees an unexpected `curl` exit code, a failure mode 
 - CloudWatch Log Stream for Lambda function output
 - SES for email notifications
 
+#### Infrastructure diagram
+
+<img src="img/cloudcraft.jpg" width="500">
+
 #### Estimated cost
 
 All of the AWS resources provisioned by this project fit within [AWS's always-free tier](https://aws.amazon.com/free/?all-free-tier.sort-by=item.additionalFields.SortRank&all-free-tier.sort-order=asc&awsf.Free%20Tier%20Types=tier%23always-free), with a single exception that is SMS messages. Within the free tier, AWS includes 1000 notifications per month, which, depending on the reliability of your infrastructure, should be more than enough for all your failure notifications.
