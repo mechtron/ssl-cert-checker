@@ -8,11 +8,11 @@ Provisions a Lambda function that checks a configurable list of hostnames for SS
 
 ## Features
 
-1. Checks for a variety of SSL failure modes including cert expiry, invalid hostname and broken cert chain
-1. Email notifications for failures
+1. Checks for a variety of SSL failure modes including cert expiry, invalid hostnames and broken cert chains
+1. Email notifications for check failures
 1. List of hostnames to check stored in DynamoDB
-1. Audit trail of failed checks persisted to DynamoDB (optional)
-1. Includes CLI tool for managing the list of hostnames to check
+1. (optional) Audit trail of failed checks persisted to DynamoDB
+1. CLI tool for managing the inventory of hostnames to monitor
 1. Terraformed IaC (deploy to your AWS account in a single command)
 1. Operates within AWS's free tier
 
@@ -119,7 +119,7 @@ When an SSL connectivity test fails, you will get an email alert with a failure 
 | `6` | `HOSTNAME_INVALID` | Couldn't resolve host. The given remote host's address was not resolved. The address of the given server could not be resolved. |
 | `7` | `FAILED_TO_CONNECT` | Failed to connect to host. curl managed to get an IP address to the machine and it tried to setup a TCP connection to the host but failed. |
 | `16` | `HTTP2_ERROR` | HTTP/2 error. A problem was detected in the HTTP2 framing layer. This is somewhat generic and can be one out of several problems, see the error message for details. |
- | `22` | `400_LEVEL_STATUS_CODE` | HTTP page not retrieved. The requested url was not found or returned another error with the HTTP error code being 400 or above. This return code only appears if `-f`, `--fail` is used. |
+ | `22` | `400_LEVEL_STATUS_CODE` | HTTP page not retrieved. The requested url was not found or returned another error with the HTTP error code being 400 or above. |
 | `27` | `CURL_OUT_OF_MEMORY` | Out of memory. A memory allocation request failed. curl needed to allocate more memory than what the system was willing to give it and had to exit. |
 | `28` | `CONNECTION_TIMED_OUT`| Operation timeout. The specified time-out period was reached according to the conditions. curl offers several timeouts, and this exit code tells one of those timeout limits were reached. |
 | `33` | `HTTP_RANGE_ERROR` | HTTP range error. The range request did not work. Resumed HTTP requests are not necessary acknowledged or supported. |
@@ -146,7 +146,7 @@ Note: if `ssl-cert-checker` sees an unexpected `curl` exit code, a failure mode 
 - Lambda function triggered by CloudWatch Events (fire every 5 minutes)
 - DynamoDB table for hostname list and peristing failed checks
 - CloudWatch Log Stream for Lambda function output
-- SES topic for email notifications
+- SES for email notifications
 
 #### Estimated cost
 
