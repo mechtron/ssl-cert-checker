@@ -24,25 +24,14 @@ resource "aws_iam_role_policy_attachment" "amazon_lambda_exec_policy" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 }
 
-resource "aws_iam_role_policy" "send_sns_sms" {
-  name = "send-sns-email-messages"
+resource "aws_iam_role_policy" "app_permissions" {
+  name = "${var.function_name}-${var.environment}"
   role = aws_iam_role.lambda_role.name
 
   policy = <<EOF
 {
     "Version": "2012-10-17",
     "Statement": [
-        {
-            "Sid": "SendSesEmail",
-            "Effect": "Allow",
-            "Action": [
-              "ses:ListVerifiedEmailAddresses",
-              "ses:VerifyEmailIdentity",
-              "ses:SendEmail",
-              "ses:SendRawEmail"
-            ],
-            "Resource": "*"
-        },
         {
             "Sid": "DynamoDbScanGetPutUpdate",
             "Effect": "Allow",
@@ -58,6 +47,17 @@ resource "aws_iam_role_policy" "send_sns_sms" {
               "${aws_dynamodb_table.dynamodb_table_checks.arn}",
               "${aws_dynamodb_table.dynamodb_table_failures.arn}"
             ]
+        },
+        {
+            "Sid": "SendSesEmail",
+            "Effect": "Allow",
+            "Action": [
+              "ses:ListVerifiedEmailAddresses",
+              "ses:VerifyEmailIdentity",
+              "ses:SendEmail",
+              "ses:SendRawEmail"
+            ],
+            "Resource": "*"
         }
     ]
 }
