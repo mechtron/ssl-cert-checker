@@ -44,7 +44,7 @@ Here's a full list of supported parameters:
 | `port` | The port of the target service | optional | `443` |
 | `check-interval-minutes` | How often (in minutes) to check the target hostname | required | `15` |
 | `notification-target` | The target address to send failure notifications to | optional | |
-| `notification-minutes-before-resending` | How long (in minutes) before re-sending failure notifications | optional | `30` |
+| `notification-minutes-before-resending` | How long (in minutes) before re-sending failure notifications | optional | `60` |
 | `cert-expiry-notify-before-days` | Notify me this many days before my certificate expires | optional | `30` |
 | `failed-check-history-days` | How long (in days) to retain records of failed checks in DynamoDB (enter `0` for unlimited storage) | optional | `0` |
 
@@ -193,7 +193,6 @@ Creating new environments is as easy as creating a new Terragrunt environment fo
 
 ## To do
 
-1. Add TTL to DynamoDB items in failed checks history table
 1. Send `SSL_CERTIFICATE_EXPIRED` alerts before cert actually expires
 1. Add `--domain` switch to return failures for a certain hostname only. Example: `ssl-cert-checker --action list-failures --domain example.com`
 1. Add support for "Fixed: back online" notifications

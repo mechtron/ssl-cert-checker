@@ -110,7 +110,7 @@ if __name__ == "__main__":
         "--notification-minutes-before-resending",
         help="How long (in minutes) before re-sending failure notifications",
         type=int,
-        default=30,
+        default=60,
     )
     parser.add_argument(
         "--cert-expiry-notify-before-days",

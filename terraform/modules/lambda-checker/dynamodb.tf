@@ -28,6 +28,11 @@ resource "aws_dynamodb_table" "dynamodb_table_failures" {
     type = "S"
   }
 
+  ttl {
+    enabled = true
+    attribute_name = "Ttl"
+  }
+
   tags = {
     Name        = var.function_name
     Environment = var.environment
