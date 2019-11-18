@@ -13,16 +13,18 @@ from test_ssl import test_ssl
 
 def time_to_check(check):
     delta_seconds = (
-        datetime.utcnow() - check["last_checked"]
+        datetime.now() - check["last_checked"]
     ).total_seconds()
     last_checked_minutes = delta_seconds / 60
-    time_to_check = last_checked_minutes >= check["check_interval_minutes"]
+    it_is_time_to_check = (
+        last_checked_minutes >= check["check_interval_minutes"]
+    )
     print("Time to check {hostname}:{port}? {result}".format(
         hostname=check["hostname"],
         port=check["port"],
-        result=time_to_check,
+        result=it_is_time_to_check,
     ))
-    return time_to_check
+    return it_is_time_to_check
 
 
 def time_to_notify(check):
@@ -41,7 +43,7 @@ def time_to_notify(check):
     return time_no_notify
 
 
-def generate_email_message(check, failed_result):
+def generate_email_message(check, failed_check):
     subject = (
         "ssl-cert-checker | {} has failed SSL checks".format(
             check["hostname"],
@@ -53,9 +55,13 @@ def generate_email_message(check, failed_result):
     ).format(
         host=check["hostname"],
         port=check["port"],
-        timestamp=failed_result["timestamp"],
-        failure_mode=failed_result["failure_mode"],
+        timestamp=failed_check["timestamp"],
+        failure_mode=failed_check["failure_mode"],
     )
+    if failed_check["cert_expiry"] != "-1":
+        message += " (which expires on {})".format(
+            failed_check["cert_expiry"],
+        )
     return subject, message
 
 
@@ -63,7 +69,7 @@ def main():
     checks = get_checks()
     for check in checks:
         if time_to_check(check):
-            result = test_ssl(check['hostname'], check['port'])
+            result = test_ssl(check)
             now = int(time.time())
             update_check_date(check["id"], "LastChecked", now)
             if not result["check_pass"]:

@@ -19,3 +19,5 @@ checker/pytz*
 checker/s3transfer*
 checker/six*
 checker/urllib3*
+
+*.pyc

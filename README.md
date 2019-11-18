@@ -136,6 +136,7 @@ When an SSL connectivity test fails, you will get an email alert with a failure 
 | `83` | `SSL_CERTIFICATE_ISSUER_CHECK_FAILED` | TLS certificate issuer check failed |
 | `90` | `SSL_PUBLIC_KEY_DOES_NOT_MATCH_PINNED_KEY` | SSL public key does not matched pinned public key |
 | `91` | `SSL_CERTIFICATE_STATUS_INVALID` | Invalid SSL certificate status |
+|  | `SSL_CERTIFICATE_EXPIRING_SOON` | SSL certificate expiring soon |
 
 Note: if `ssl-cert-checker` sees an unexpected `curl` exit code, a failure mode of `CURL_UNKNOWN_EXIT_CODE_<curl_exit_code>` will be used.
 
@@ -193,7 +194,6 @@ Creating new environments is as easy as creating a new Terragrunt environment fo
 
 ## To do
 
-1. Send `SSL_CERTIFICATE_EXPIRED` alerts before cert actually expires
 1. Add `--domain` switch to return failures for a certain hostname only. Example: `ssl-cert-checker --action list-failures --domain example.com`
 1. Add support for "Fixed: back online" notifications
 1. Add support for Slack notifications

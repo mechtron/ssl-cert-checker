@@ -154,7 +154,7 @@ def update_ses_subscription_email_sent_status(check_id, status):
 def create_failed_check(check, failed_result):
     if not "cert_expiry" in failed_result:
         failed_result["cert_expiry"] = "-1"
-    retention_days_in_seconds = check["failed_check_retention_days"]*3600*24
+    retention_days_in_seconds = check["failed_check_retention_days"]*24*60*60
     ttl = int(time.time()) + retention_days_in_seconds
     response = DYNAMODB_CLIENT.put_item(
         TableName=DYNAMODB_TABLE_NAME_FAILURES,
@@ -172,7 +172,7 @@ def create_failed_check(check, failed_result):
                 "S": failed_result["failure_mode"],
             },
             "CertExpiry": {
-                "N": failed_result["cert_expiry"],
+                "N": str(failed_result["cert_expiry"]),
             },
             "Ttl": {
                 "N": str(ttl),
