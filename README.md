@@ -145,7 +145,7 @@ Note: if `ssl-cert-checker` sees an unexpected `curl` exit code, a failure mode 
 #### Resources
 
 - Lambda function triggered by CloudWatch Events (fire every 5 minutes)
-- DynamoDB table for hostname list and peristing failed checks
+- DynamoDB table for hostname list and persisting failed checks
 - CloudWatch Log Stream for Lambda function output
 - SES for email notifications
 
